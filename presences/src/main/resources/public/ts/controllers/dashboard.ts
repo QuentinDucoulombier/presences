@@ -70,10 +70,6 @@ export const dashboardController = ng.controller('DashboardController', ['$scope
             if (!window.structure) {
                 window.structure = await Me.preference(PreferencesUtils.PREFERENCE_KEYS.PRESENCE_STRUCTURE);
             } else {
-                initService.getViescoInitStatus(window.structure.id).then((r: IInitStatusResponse) => {
-                    if (r.initialized !== undefined) vm.isInit = !r.initialized;
-                    else vm.isInit = false;
-                });
                 await Promise.all([vm.getAlert(), vm.getAbsentsCounts()])
                     .catch(error => {
                         console.log(error);
@@ -81,6 +77,10 @@ export const dashboardController = ng.controller('DashboardController', ['$scope
                     });
                 vm.groupsSearch = new GroupsSearch(window.structure.id, searchService, groupService, groupingService)
             }
+            initService.getViescoInitStatus(window.structure.id).then((r: IInitStatusResponse) => {
+                if (r.initialized !== undefined) vm.isInit = !r.initialized;
+                else vm.isInit = false;
+            });
             $scope.safeApply();
         };
 
