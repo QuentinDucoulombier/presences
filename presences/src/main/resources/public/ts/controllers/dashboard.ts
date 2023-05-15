@@ -69,20 +69,26 @@ export const dashboardController = ng.controller('DashboardController', ['$scope
         const initData = async (): Promise<void> => {
             if (!window.structure) {
                 window.structure = await Me.preference(PreferencesUtils.PREFERENCE_KEYS.PRESENCE_STRUCTURE);
+                await getViescoInitStatus();
             } else {
                 await Promise.all([vm.getAlert(), vm.getAbsentsCounts()])
                     .catch(error => {
                         console.log(error);
                         notify.error("presences.error.get.alert");
                     });
-                vm.groupsSearch = new GroupsSearch(window.structure.id, searchService, groupService, groupingService)
+                vm.groupsSearch = new GroupsSearch(window.structure.id, searchService, groupService, groupingService);
+                await getViescoInitStatus()
             }
+
+            $scope.safeApply();
+        };
+
+        const getViescoInitStatus = async (): Promise<void> => {
             initService.getViescoInitStatus(window.structure.id).then((r: IInitStatusResponse) => {
                 if (r.initialized !== undefined) vm.isInit = !r.initialized;
                 else vm.isInit = false;
             });
-            $scope.safeApply();
-        };
+        }
 
         vm.date = DateUtils.format(moment(), DateUtils.FORMAT['DATE-FULL-LETTER']);
         vm.filter = {
