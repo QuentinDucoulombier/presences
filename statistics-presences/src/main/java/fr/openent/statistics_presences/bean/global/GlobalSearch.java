@@ -105,8 +105,9 @@ public class GlobalSearch {
     public JsonArray prefetchUserPipeline() {
         JsonArray pipeline = new JsonArray()
                 .add(match())
-                .add(addCountIdField())
-                .addAll(groupAbsences())
+                .add(addCountIdField());
+        if (!HOUR.equals(recoveryMethod)) pipeline.add(addStartAtField());
+        pipeline.addAll(groupAbsences())
                 .add(group())
                 .add(fromToMatcher())
                 .add(prefetchDistinct())
