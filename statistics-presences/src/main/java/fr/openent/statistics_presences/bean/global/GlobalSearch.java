@@ -108,7 +108,6 @@ public class GlobalSearch {
                 .add(addCountIdField());
         if (!HOUR.equals(recoveryMethod)) pipeline.add(addStartAtField());
         pipeline.addAll(groupAbsences())
-                .add(group())
                 .add(fromToMatcher())
                 .add(prefetchDistinct())
                 .add(prefetchUserProject())
