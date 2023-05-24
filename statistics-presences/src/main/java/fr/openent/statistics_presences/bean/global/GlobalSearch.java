@@ -106,7 +106,7 @@ public class GlobalSearch {
         JsonArray pipeline = new JsonArray()
                 .add(match())
                 .add(addCountIdField())
-                .add(groupByCountId())
+                .addAll(groupAbsences())
                 .add(group())
                 .add(fromToMatcher())
                 .add(prefetchDistinct())
